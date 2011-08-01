@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 	xmlns:s="library://ns.adobe.com/flex/spark" 
-	title="How Long?" 
-	viewActivate="viewActivateHandler(event)">
+	title="How Many Minutes?" 
+	viewActivate="onViewActivate(event)"
+	>
 
 	<fx:Script>
 		<![CDATA[
@@ -10,36 +11,40 @@
 			
 			import spark.events.ViewNavigatorEvent;
 
+			/**
 			[Bindable]
 			[Embed("assets/launchpad_default_icon32.png")]
 			public var fbIcon:Class;
+			 */
 
 			protected const DATABASE_FILE:String = "outtime.db";
 			protected const MINUTES_DEFAULT:int = 1;
+			protected const MINUTES_MIN:int = 1;
+			protected const MINUTES_MAX:int = 5;
 			
 			[Bindable]
 			protected var mins:int = 0;
 			
 			protected var sqlConnection:SQLConnection;
 			
-			protected function viewActivateHandler(event:ViewNavigatorEvent):void
+			protected function onViewActivate(event:ViewNavigatorEvent):void
 			{				
 				mins = MINUTES_DEFAULT;
 				
 				sqlConnection = new SQLConnection();
-				sqlConnection.addEventListener(SQLEvent.OPEN, openHandler);
-				sqlConnection.addEventListener(SQLErrorEvent.ERROR, sqlError);				
+				sqlConnection.addEventListener(SQLEvent.OPEN, onOpenDatabase);
+				sqlConnection.addEventListener(SQLErrorEvent.ERROR, onSQLError);				
 				sqlConnection.open(File.applicationStorageDirectory.resolvePath(DATABASE_FILE));
 			}
 			
-			protected function openHandler(event:SQLEvent):void {
+			protected function onOpenDatabase(event:SQLEvent):void {
 				trace("database opened successfully");
 				
 				// creates "settings" table
 				var statement:SQLStatement = new SQLStatement();
 				statement.sqlConnection = sqlConnection;
-				statement.addEventListener(SQLEvent.RESULT, createResult);
-				statement.addEventListener(SQLErrorEvent.ERROR, sqlError);
+				statement.addEventListener(SQLEvent.RESULT, onCreateTable);
+				statement.addEventListener(SQLErrorEvent.ERROR, onSQLError);
 				
 				statement.text = 
 					"CREATE TABLE IF NOT EXISTS settings (" + 
@@ -49,19 +54,21 @@
 				statement.execute();
 			}
 			
-			protected function createResult(e:SQLEvent):void {
+			protected function onCreateTable(e:SQLEvent):void {
 				trace("table created successfully");
 
 				// creates a "minutes" row, if it doesn't already exist
 				var statement:SQLStatement = new SQLStatement();
 				statement.sqlConnection = sqlConnection;
 				
+				trace("trying to store minutes");
 				statement.text = "INSERT INTO settings (name, value) VALUES (:name, :value)";
 				statement.parameters[":name"] = "minutes";
 				statement.parameters[":value"] = mins;
 					
 				try {
 					statement.execute();
+					trace("minutes successfully stored");
 				} catch (error:SQLError) {
 					// if the row does already exist	
 					if (error.errorID == 3131 && error.detailArguments[0] == "name") {
@@ -73,6 +80,7 @@
 						statement.text = "SELECT value FROM settings WHERE name = 'minutes'";
 						try {
 							statement.execute();
+							trace("minutes successfully retrieved");
 							var result:SQLResult = statement.getResult();
 							mins = Number(Object(result.data[0]).value);
 						} catch (error:SQLError) {
@@ -80,36 +88,22 @@
 							trace("Details: " + error.details);
 						}
 					}
-				} finally {
-					getAllSettings();
 				}
-
 			}
 												
-			protected function sqlError(e:SQLErrorEvent):void {
+			protected function onSQLError(e:SQLErrorEvent):void {
 				trace("Error message: " + e.error.message);
 				trace("Details: " + e.error.details);
 			}
-									
-			protected function getAllSettings():void
-			{
-				var statement:SQLStatement = new SQLStatement();
-				statement.sqlConnection = sqlConnection;
-				statement.text = "SELECT * FROM settings";
-				statement.execute();
-				settingsList.dataProvider = new ArrayCollection(statement.getResult().data);
-			}
-			
+												
 			protected function increment(event:MouseEvent):void {
 				minutes.text = (++mins).toString();
 				save();
-				getAllSettings();
 			}
 			
 			protected function decrement(event:MouseEvent):void {
 				minutes.text = (--mins).toString();
 				save();
-				getAllSettings();
 			}
 			
 			protected function save():void
@@ -119,28 +113,22 @@
 				statement.text = "UPDATE settings SET value = :minutes WHERE name = 'minutes'";
 				statement.parameters[":minutes"] = mins;
 				statement.execute();
-				getAllSettings();
-				
-				/*
-				// assume the variables "username" and "password" 
-				// contain user-entered data var sql:String = "SELECT userId " + "FROM users " + "WHERE username = :username " + " AND password = :password"; 
-				var statement:SQLStatement = new SQLStatement(); statement.text = sql; 
-				// set parameter values 
-				*/
 			}
 
 		]]>
 	</fx:Script>
 	
-	<s:VGroup>
-		<s:HGroup>
-			<s:Button id="less" label="less" click="decrement(event)" enabled="{mins > 1}" />
-			<s:Label id="minutes" text="{mins}" />
-			<s:Button id="more" label="more" click="increment(event)" enabled="{10 > mins}" />
+	<s:layout>
+		<s:VerticalLayout gap="0" horizontalAlign="center" verticalAlign="middle" />
+	</s:layout>
+
+	<s:VGroup horizontalAlign="center">
+		<s:HGroup verticalAlign="middle">
+			<s:Button id="less" label="less" click="decrement(event)" enabled="{mins > MINUTES_MIN}" />
+			<s:Label id="minutes" text="{mins}" fontSize="200" width="250" textAlign="center" />
+			<s:Button id="more" label="more" click="increment(event)" enabled="{MINUTES_MAX > mins}" />
 		</s:HGroup>
-		<s:Label text="minutes." />
 		<s:Button id="start" label="start!" />
-		<s:List id="settingsList" width="100%" height="100%" labelField="value"/>
 	</s:VGroup>	
 	
 </s:View>
