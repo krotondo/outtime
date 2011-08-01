@@ -18,12 +18,14 @@
 			protected const MINUTES_DEFAULT:int = 1;
 			
 			[Bindable]
-			protected var mins:int;
+			protected var mins:int = 0;
 			
 			protected var sqlConnection:SQLConnection;
 			
 			protected function viewActivateHandler(event:ViewNavigatorEvent):void
 			{				
+				mins = MINUTES_DEFAULT;
+				
 				sqlConnection = new SQLConnection();
 				sqlConnection.addEventListener(SQLEvent.OPEN, openHandler);
 				sqlConnection.addEventListener(SQLErrorEvent.ERROR, sqlError);				
@@ -56,17 +58,17 @@
 				
 				statement.text = "INSERT INTO settings (name, value) VALUES (:name, :value)";
 				statement.parameters[":name"] = "minutes";
-				statement.parameters[":value"] = MINUTES_DEFAULT;
+				statement.parameters[":value"] = mins;
 					
 				try {
 					statement.execute();
 				} catch (error:SQLError) {
-					//trace("Error message: " + error.message);
-					//trace("Details: " + error.details);	
+					// if the row does already exist	
 					if (error.errorID == 3131 && error.detailArguments[0] == "name") {
 						trace("a 'minutes' row already exists");
 						
-						//get the existing setting from the database, and use it to set 'mins'
+						// gets the existing value from the database
+						// and uses it to set 'mins'
 						statement.clearParameters();
 						statement.text = "SELECT value FROM settings WHERE name = 'minutes'";
 						try {
