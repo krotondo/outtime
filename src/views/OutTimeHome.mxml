@@ -22,15 +22,15 @@
 			protected const MINUTES_MIN:int = 1;
 			protected const MINUTES_MAX:int = 5;
 			
-			[Bindable]
-			protected var mins:int = 0;
+			[Bindable] protected var minutesSet:int;
+			[Bindable] protected var secondsOnClock:int;
 			
 			protected var sqlConnection:SQLConnection;
 			
 			protected function onViewActivate(event:ViewNavigatorEvent):void
 			{				
 				this.currentState = "set";
-				mins = MINUTES_DEFAULT;
+				minutesSet = MINUTES_DEFAULT;
 				
 				sqlConnection = new SQLConnection();
 				sqlConnection.addEventListener(SQLEvent.OPEN, onOpenDatabase);
@@ -65,7 +65,7 @@
 				trace("trying to store minutes");
 				statement.text = "INSERT INTO settings (name, value) VALUES (:name, :value)";
 				statement.parameters[":name"] = "minutes";
-				statement.parameters[":value"] = mins;
+				statement.parameters[":value"] = minutesSet;
 					
 				try {
 					statement.execute();
@@ -83,7 +83,7 @@
 							statement.execute();
 							trace("minutes successfully retrieved");
 							var result:SQLResult = statement.getResult();
-							mins = Number(Object(result.data[0]).value);
+							minutesSet = Number(Object(result.data[0]).value);
 						} catch (error:SQLError) {
 							trace("Error message: " + error.message);
 							trace("Details: " + error.details);
@@ -98,12 +98,12 @@
 			}
 												
 			protected function increment(event:MouseEvent):void {
-				minutes.text = (++mins).toString();
+				minutes.text = (++minutesSet).toString();
 				save();
 			}
 			
 			protected function decrement(event:MouseEvent):void {
-				minutes.text = (--mins).toString();
+				minutes.text = (--minutesSet).toString();
 				save();
 			}
 			
@@ -112,13 +112,38 @@
 				var statement:SQLStatement = new SQLStatement();
 				statement.sqlConnection = sqlConnection;
 				statement.text = "UPDATE settings SET value = :minutes WHERE name = 'minutes'";
-				statement.parameters[":minutes"] = mins;
+				statement.parameters[":minutes"] = minutesSet;
 				statement.execute();
 			}
 			
 			protected function startTimer(e:MouseEvent):void {
 				trace("start button pressed");
 				this.currentState = "run";
+				secondsOnClock = minutesSet * 60;
+				
+				var timer:Timer = new Timer(1000, secondsOnClock);
+				timer.addEventListener(TimerEvent.TIMER, countDown);
+				timer.addEventListener(TimerEvent.TIMER_COMPLETE, showEnd);
+				timer.start();
+				updateClock();
+			}
+			
+			protected function countDown(e:TimerEvent):void {
+				secondsOnClock--;
+				updateClock();
+			}
+			
+			protected function updateClock():void {					
+				clockMinutes.text = Math.floor(secondsOnClock / 60).toString();
+
+				var s:String = (secondsOnClock % 60).toString();
+				clockSeconds.text = s.length < 2 ? "0" + s: s;				
+
+			}
+			
+			protected function showEnd(e:TimerEvent):void {
+				this.currentState = "end";
+				trace("ding!");
 			}
 
 		]]>
@@ -131,20 +156,32 @@
 	<s:states>
 		<s:State name="set" />
 		<s:State name="run" />
+		<s:State name="end" />
 	</s:states>
 
 	<s:VGroup horizontalAlign="center" includeIn="set">
-		<s:Label text="How many minutes?" fontSize="50" textAlign="center" />
+		<s:Label text="How long?" fontSize="100" textAlign="center" />
 		<s:HGroup verticalAlign="middle">
-			<s:Button id="less" label="less" click="decrement(event)" enabled="{mins > MINUTES_MIN}" />
-			<s:Label id="minutes" text="{mins}" fontSize="200" width="250" textAlign="center" />
-			<s:Button id="more" label="more" click="increment(event)" enabled="{MINUTES_MAX > mins}" />
+			<s:Button id="less" label="less" click="decrement(event)" enabled="{minutesSet > MINUTES_MIN}" />
+			<s:Label id="minutes" text="{minutesSet}" fontSize="200" width="250" textAlign="center" />
+			<s:Button id="more" label="more" click="increment(event)" enabled="{MINUTES_MAX > minutesSet}" />
 		</s:HGroup>
+		<s:Label text="{minutesSet > 1 ? 'minutes' : 'minute'}" fontSize="100" textAlign="center" />
 		<s:Button id="start" label="start!" click="startTimer(event)" />
 	</s:VGroup>
 	
 	<s:VGroup horizontalAlign="center" includeIn="run">
-		<s:Label text="Timer goes here" fontSize="50" textAlign="center" />
+		<s:HGroup verticalAlign="middle">
+			<s:Label id="clockMinutes" fontSize="200" textAlign="justify" />
+			<s:Label id="clockColon" text=":" fontSize="200" textAlign="justify" />
+			<s:Label id="clockSeconds" fontSize="200" textAlign="justify" />
+		</s:HGroup>
 	</s:VGroup>
+
+	<s:VGroup horizontalAlign="center" includeIn="end">
+		<s:Label text="ding!" fontSize="200" textAlign="center" />
+		<s:Button label="ok" click="{this.currentState='set';}" />
+	</s:VGroup>
+
 	
 </s:View>
