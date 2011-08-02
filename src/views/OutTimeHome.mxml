@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 	xmlns:s="library://ns.adobe.com/flex/spark" 
-	title="How Many Minutes?" 
+	title="OutTime" 
 	viewActivate="onViewActivate(event)"
 	>
 
@@ -29,6 +29,7 @@
 			
 			protected function onViewActivate(event:ViewNavigatorEvent):void
 			{				
+				this.currentState = "set";
 				mins = MINUTES_DEFAULT;
 				
 				sqlConnection = new SQLConnection();
@@ -114,21 +115,36 @@
 				statement.parameters[":minutes"] = mins;
 				statement.execute();
 			}
+			
+			protected function startTimer(e:MouseEvent):void {
+				trace("start button pressed");
+				this.currentState = "run";
+			}
 
 		]]>
 	</fx:Script>
-	
+
 	<s:layout>
 		<s:VerticalLayout gap="0" horizontalAlign="center" verticalAlign="middle" />
 	</s:layout>
+	
+	<s:states>
+		<s:State name="set" />
+		<s:State name="run" />
+	</s:states>
 
-	<s:VGroup horizontalAlign="center">
+	<s:VGroup horizontalAlign="center" includeIn="set">
+		<s:Label text="How many minutes?" fontSize="50" textAlign="center" />
 		<s:HGroup verticalAlign="middle">
 			<s:Button id="less" label="less" click="decrement(event)" enabled="{mins > MINUTES_MIN}" />
 			<s:Label id="minutes" text="{mins}" fontSize="200" width="250" textAlign="center" />
 			<s:Button id="more" label="more" click="increment(event)" enabled="{MINUTES_MAX > mins}" />
 		</s:HGroup>
-		<s:Button id="start" label="start!" />
-	</s:VGroup>	
+		<s:Button id="start" label="start!" click="startTimer(event)" />
+	</s:VGroup>
+	
+	<s:VGroup horizontalAlign="center" includeIn="run">
+		<s:Label text="Timer goes here" fontSize="50" textAlign="center" />
+	</s:VGroup>
 	
 </s:View>
