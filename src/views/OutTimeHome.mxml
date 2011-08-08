@@ -2,8 +2,14 @@
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 	xmlns:s="library://ns.adobe.com/flex/spark" 
 	title="OutTime" 
-	viewActivate="onViewActivate(event)"
+	viewActivate="onViewActivate(event)" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	>
+	
+	<fx:Declarations>
+		<mx:SolidColor id="elapsed" color="blue"/>
+		<mx:SolidColor id="remaining" color="yellow" alpha=".3"/>
+	</fx:Declarations>
 
 	<fx:Script>
 		<![CDATA[
@@ -21,9 +27,11 @@
 			protected const MINUTES_DEFAULT:int = 1;
 			protected const MINUTES_MIN:int = 1;
 			protected const MINUTES_MAX:int = 5;
+			protected const ELAPSED:String = "elapsed";
+			protected const REMAINING:String = "remaining";
 			
 			[Bindable] protected var minutesSet:int;
-			[Bindable] protected var secondsOnClock:int;
+			[Bindable] protected var secondsRemaining:int;
 			
 			protected var sqlConnection:SQLConnection;
 			
@@ -36,7 +44,7 @@
 				sqlConnection.addEventListener(SQLErrorEvent.ERROR, onSQLError);				
 				sqlConnection.open(File.applicationStorageDirectory.resolvePath(DATABASE_FILE));
 			}
-			
+						
 			protected function onOpenDatabase(event:SQLEvent):void {
 				trace("database opened successfully");
 				
@@ -118,9 +126,9 @@
 			protected function startTimer(e:MouseEvent):void {
 				trace("start button pressed");
 				this.currentState = "run";
-				secondsOnClock = minutesSet * 60;
+				secondsRemaining = minutesSet * 60;
 				
-				var timer:Timer = new Timer(1000, secondsOnClock);
+				var timer:Timer = new Timer(1000, secondsRemaining);
 				timer.addEventListener(TimerEvent.TIMER, countDown);
 				timer.addEventListener(TimerEvent.TIMER_COMPLETE, showEnd);
 				timer.start();
@@ -128,16 +136,17 @@
 			}
 			
 			protected function countDown(e:TimerEvent):void {
-				secondsOnClock--;
+				secondsRemaining--;
 				updateClock();
 			}
 			
 			protected function updateClock():void {					
-				clockMinutes.text = Math.floor(secondsOnClock / 60).toString();
+				clockMinutes.text = Math.floor(secondsRemaining / 60).toString();
 
-				var s:String = (secondsOnClock % 60).toString();
+				var s:String = (secondsRemaining % 60).toString();
 				clockSeconds.text = s.length < 2 ? "0" + s: s;				
-
+				
+				trace(minutesSet*60-secondsRemaining + " : " + secondsRemaining);
 			}
 			
 			protected function showEnd(e:TimerEvent):void {
@@ -145,7 +154,6 @@
 				var sound:Sound = new Sound(new URLRequest("assets/ding.mp3"));
 				sound.play();
 			}
-
 		]]>
 	</fx:Script>
 
@@ -171,11 +179,24 @@
 	</s:VGroup>
 	
 	<s:VGroup horizontalAlign="center" includeIn="run">
-		<s:HGroup verticalAlign="middle">
-			<s:Label id="clockMinutes" fontSize="200" textAlign="justify" />
-			<s:Label id="clockColon" text=":" fontSize="200" textAlign="justify" />
-			<s:Label id="clockSeconds" fontSize="200" textAlign="justify" />
-		</s:HGroup>
+		<mx:PieChart id="pie" showDataTips="true">
+			<mx:ArrayCollection id="pieData">
+				<mx:source>
+					<fx:Object id="elapsedData" label="seconds" data="{minutesSet*60 - secondsRemaining}" />
+					<fx:Object id="remainingData" label="seconds remaining" data="{secondsRemaining}" />						
+				</mx:source>
+			</mx:ArrayCollection>
+			<mx:series>
+				<mx:PieSeries field="data" nameField="label" fills="{[elapsed, remaining]}" />	
+			</mx:series>
+		</mx:PieChart>
+		<s:Group>
+			<s:HGroup verticalAlign="middle" verticalCenter="0" horizontalCenter="0">
+				<s:Label id="clockMinutes" fontSize="200" textAlign="justify" />
+				<s:Label id="clockColon" text=":" fontSize="200" textAlign="justify" />
+				<s:Label id="clockSeconds" fontSize="200" textAlign="justify" />
+			</s:HGroup>
+		</s:Group>
 	</s:VGroup>
 
 	<s:VGroup horizontalAlign="center" includeIn="end">
