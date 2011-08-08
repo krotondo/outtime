@@ -7,10 +7,42 @@
 	>
 	
 	<fx:Declarations>
-		<mx:SolidColor id="elapsedColor" color="blue"/>
-		<mx:SolidColor id="remainingColor" color="yellow" alpha=".3"/>
+		<mx:SolidColor id="elapsedColor" color="white"/>
+		<mx:SolidColor id="remainingColor" color="0x009ADF" alpha=".3"/>
 	</fx:Declarations>
 
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@font-face { 
+			src: url("../assets/fonts/PrintClearlyTT.ttf"); 
+			fontFamily: printClearly; 
+			embedAsCFF: false; 
+		}
+		@font-face { 
+			src: url("../assets/fonts/LearningCurve.ttf"); 
+			fontFamily: learningCurve; 
+			embedAsCFF: false; 
+		}
+		.display {
+			fontFamily: learningCurve;
+			fontSize: 250;
+			borderVisible:false;
+			contentBackgroundColor:white;
+		}
+		.paragraph {
+			fontFamily: printClearly;
+			fontSize: 70;			
+			borderVisible:false;
+			contentBackgroundColor:white;
+		}
+		.clock {
+			fontFamily: printClearly;
+			fontSize: 250;			
+			borderVisible:false;
+			contentBackgroundColor:white;
+		}
+	</fx:Style>
+	
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
@@ -172,33 +204,32 @@
 	</s:states>
 
 	<s:VGroup horizontalAlign="center" includeIn="set">
-		<s:Label text="How long?" fontSize="100" textAlign="center" />
+		<s:TextArea text="How many" textAlign="center" styleName="paragraph" />
+		<s:TextArea text="minutes" textAlign="center" styleName="display" />
 		<s:HGroup verticalAlign="middle">
 			<s:Button id="less" label="less" click="decrement(event)" enabled="{minutesSet > MINUTES_MIN}" />
-			<s:Label id="minutes" text="{minutesSet}" fontSize="200" width="250" textAlign="center" />
+			<s:TextArea id="minutes" text="{minutesSet}" width="250" textAlign="center" styleName="display" />
 			<s:Button id="more" label="more" click="increment(event)" enabled="{MINUTES_MAX > minutesSet}" />
 		</s:HGroup>
-		<s:Label text="{minutesSet > 1 ? 'minutes' : 'minute'}" fontSize="100" textAlign="center" />
 		<s:Button id="start" label="start!" click="startTimer(event)" />
 	</s:VGroup>
 	
 	<s:VGroup horizontalAlign="center" includeIn="run">
-		<mx:PieChart id="pie" showDataTips="true" dataProvider="{pieData}">
+		<mx:PieChart id="pie" dataProvider="{pieData}" rotation="-90">
 			<mx:series>
 				<mx:PieSeries fills="{[elapsedColor, remainingColor]}" />	
 			</mx:series>
 		</mx:PieChart>
-		<s:Group>
-			<s:HGroup verticalAlign="middle" verticalCenter="0" horizontalCenter="0">
-				<s:Label id="clockMinutes" fontSize="200" textAlign="justify" />
-				<s:Label id="clockColon" text=":" fontSize="200" textAlign="justify" />
-				<s:Label id="clockSeconds" fontSize="200" textAlign="justify" />
-			</s:HGroup>
-		</s:Group>
+		<s:HGroup verticalAlign="middle" gap="0">
+			<s:TextArea id="clockMinutes" styleName="clock" width="75" />
+			<s:TextArea id="clockColon" text=":" styleName="clock" width="30" />
+			<s:TextArea id="clockSeconds" styleName="clock" width="200" />
+		</s:HGroup>
 	</s:VGroup>
 
 	<s:VGroup horizontalAlign="center" includeIn="end">
-		<s:Label text="ding!" fontSize="200" textAlign="center" />
+		<s:TextArea text="time to say" styleName="paragraph" textAlign="center" />
+		<s:TextArea text="sorry" styleName="display" textAlign="center" />
 		<s:Button label="ok" click="{this.currentState='set';}" />
 	</s:VGroup>
 
