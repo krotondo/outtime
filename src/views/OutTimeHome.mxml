@@ -7,8 +7,8 @@
 	>
 	
 	<fx:Declarations>
-		<mx:SolidColor id="elapsed" color="blue"/>
-		<mx:SolidColor id="remaining" color="yellow" alpha=".3"/>
+		<mx:SolidColor id="elapsedColor" color="blue"/>
+		<mx:SolidColor id="remainingColor" color="yellow" alpha=".3"/>
 	</fx:Declarations>
 
 	<fx:Script>
@@ -32,6 +32,7 @@
 			
 			[Bindable] protected var minutesSet:int;
 			[Bindable] protected var secondsRemaining:int;
+			[Bindable] protected var pieData:ArrayCollection;
 			
 			protected var sqlConnection:SQLConnection;
 			
@@ -43,6 +44,8 @@
 				sqlConnection.addEventListener(SQLEvent.OPEN, onOpenDatabase);
 				sqlConnection.addEventListener(SQLErrorEvent.ERROR, onSQLError);				
 				sqlConnection.open(File.applicationStorageDirectory.resolvePath(DATABASE_FILE));
+				
+				pieData = new ArrayCollection([0, minutesSet]);
 			}
 						
 			protected function onOpenDatabase(event:SQLEvent):void {
@@ -146,7 +149,8 @@
 				var s:String = (secondsRemaining % 60).toString();
 				clockSeconds.text = s.length < 2 ? "0" + s: s;				
 				
-				trace(minutesSet*60-secondsRemaining + " : " + secondsRemaining);
+				pieData[0] = minutesSet*60 - secondsRemaining;
+				pieData[1] = secondsRemaining;
 			}
 			
 			protected function showEnd(e:TimerEvent):void {
@@ -179,15 +183,9 @@
 	</s:VGroup>
 	
 	<s:VGroup horizontalAlign="center" includeIn="run">
-		<mx:PieChart id="pie" showDataTips="true">
-			<mx:ArrayCollection id="pieData">
-				<mx:source>
-					<fx:Object id="elapsedData" label="seconds" data="{minutesSet*60 - secondsRemaining}" />
-					<fx:Object id="remainingData" label="seconds remaining" data="{secondsRemaining}" />						
-				</mx:source>
-			</mx:ArrayCollection>
+		<mx:PieChart id="pie" showDataTips="true" dataProvider="{pieData}">
 			<mx:series>
-				<mx:PieSeries field="data" nameField="label" fills="{[elapsed, remaining]}" />	
+				<mx:PieSeries fills="{[elapsedColor, remainingColor]}" />	
 			</mx:series>
 		</mx:PieChart>
 		<s:Group>
