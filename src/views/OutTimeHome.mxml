@@ -142,7 +142,8 @@
 			
 			protected function showEnd(e:TimerEvent):void {
 				this.currentState = "end";
-				trace("ding!");
+				var sound:Sound = new Sound(new URLRequest("assets/ding.mp3"));
+				sound.play();
 			}
 
 		]]>
