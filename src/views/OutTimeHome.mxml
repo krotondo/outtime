@@ -28,8 +28,7 @@
 			protected var sqlConnection:SQLConnection;
 			
 			protected function onViewActivate(event:ViewNavigatorEvent):void
-			{				
-				this.currentState = "set";
+			{
 				minutesSet = MINUTES_DEFAULT;
 				
 				sqlConnection = new SQLConnection();
