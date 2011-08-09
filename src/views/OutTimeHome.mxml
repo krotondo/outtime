@@ -40,6 +40,10 @@
 			fontSize: 250;			
 			borderVisible:false;
 			contentBackgroundColor:white;
+			paddingBottom:0;
+			paddingTop:0;
+			paddingLeft:0;
+			paddingRight:0;
 		}
 	</fx:Style>
 	
@@ -176,10 +180,12 @@
 			}
 			
 			protected function updateClock():void {					
-				clockMinutes.text = Math.floor(secondsRemaining / 60).toString();
+				var m:String = Math.floor(secondsRemaining / 60).toString();
 
 				var s:String = (secondsRemaining % 60).toString();
-				clockSeconds.text = s.length < 2 ? "0" + s: s;				
+				s = s.length < 2 ? "0" + s: s;		
+				
+				clock.text = m + ":" + s;
 				
 				pieData[0] = minutesSet*60 - secondsRemaining;
 				pieData[1] = secondsRemaining;
@@ -204,32 +210,32 @@
 	</s:states>
 
 	<s:VGroup horizontalAlign="center" includeIn="set">
-		<s:TextArea text="How many" textAlign="center" styleName="paragraph" />
-		<s:TextArea text="minutes" textAlign="center" styleName="display" />
+		<s:TextArea text="How many" textAlign="center" styleName="paragraph" editable="false" selectable="false"/>
+		<s:TextArea text="minutes" textAlign="center" styleName="display" width="600" editable="false" selectable="false" />
 		<s:HGroup verticalAlign="middle">
 			<s:Button id="less" label="less" click="decrement(event)" enabled="{minutesSet > MINUTES_MIN}" />
-			<s:TextArea id="minutes" text="{minutesSet}" width="250" textAlign="center" styleName="display" />
+			<s:TextArea id="minutes" styleName="clock" width="350"
+						text="{minutesSet}" textAlign="center" paddingLeft="100" paddingRight="100" 
+						editable="false" selectable="false" />
 			<s:Button id="more" label="more" click="increment(event)" enabled="{MINUTES_MAX > minutesSet}" />
 		</s:HGroup>
 		<s:Button id="start" label="start!" click="startTimer(event)" />
 	</s:VGroup>
 	
 	<s:VGroup horizontalAlign="center" includeIn="run">
-		<mx:PieChart id="pie" dataProvider="{pieData}" rotation="-90">
+		<mx:PieChart id="pie" dataProvider="{pieData}" rotation="-90" >
 			<mx:series>
-				<mx:PieSeries fills="{[elapsedColor, remainingColor]}" />	
+				<mx:PieSeries fills="{[elapsedColor, remainingColor]}" filters="[]" />	
 			</mx:series>
 		</mx:PieChart>
 		<s:HGroup verticalAlign="middle" gap="0">
-			<s:TextArea id="clockMinutes" styleName="clock" width="75" />
-			<s:TextArea id="clockColon" text=":" styleName="clock" width="30" />
-			<s:TextArea id="clockSeconds" styleName="clock" width="200" />
+			<s:TextArea id="clock" styleName="clock" textAlign="center" editable="false" selectable="false"/>
 		</s:HGroup>
 	</s:VGroup>
 
 	<s:VGroup horizontalAlign="center" includeIn="end">
-		<s:TextArea text="time to say" styleName="paragraph" textAlign="center" />
-		<s:TextArea text="sorry" styleName="display" textAlign="center" />
+		<s:TextArea text="time to say" styleName="paragraph" textAlign="center" editable="false" selectable="false"/>
+		<s:TextArea text="sorry" styleName="display" textAlign="center" editable="false" selectable="false" />
 		<s:Button label="ok" click="{this.currentState='set';}" />
 	</s:VGroup>
 
