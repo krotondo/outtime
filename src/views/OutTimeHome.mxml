@@ -25,19 +25,24 @@
 		}
 		.display {
 			fontFamily: learningCurve;
-			fontSize: 250;
+			fontSize: 100;
+			color: black;
 			borderVisible:false;
 			contentBackgroundColor:white;
+			contentBackgroundAlpha:0;
 		}
 		.paragraph {
 			fontFamily: printClearly;
 			fontSize: 70;			
+			color: black;
 			borderVisible:false;
 			contentBackgroundColor:white;
+			contentBackgroundAlpha:0;
 		}
 		.clock {
 			fontFamily: printClearly;
-			fontSize: 250;			
+			fontSize: 100;
+			color: #F15A24;
 			borderVisible:false;
 			contentBackgroundColor:white;
 			paddingBottom:0;
@@ -51,6 +56,7 @@
 		<![CDATA[
 			import mx.collections.ArrayCollection;
 			
+			import spark.components.supportClasses.StyleableTextField;
 			import spark.events.ViewNavigatorEvent;
 
 			/**
@@ -209,18 +215,19 @@
 		<s:State name="end" />
 	</s:states>
 
-	<s:VGroup horizontalAlign="center" includeIn="set">
-		<s:TextArea text="How many" textAlign="center" styleName="paragraph" editable="false" selectable="false"/>
-		<s:TextArea text="minutes" textAlign="center" styleName="display" width="600" editable="false" selectable="false" />
-		<s:HGroup verticalAlign="middle">
+	<s:Group includeIn="set">
+		<s:TextArea text="How many" textAlign="center" styleName="paragraph" width="600" editable="false" selectable="false" horizontalCenter="0" verticalCenter="-300" />
+		<s:TextArea id="question" text="minutes" textAlign="center" styleName="display" width="600" editable="false" selectable="false" scaleX="2" scaleY="2" horizontalCenter="0" verticalCenter="-200" />
+		<s:TextArea text="?" textAlign="center" styleName="display" editable="false" selectable="false" scaleX="2" scaleY="2" horizontalCenter="{StyleableTextField(question.textDisplay).width/2 + 60}" verticalCenter="-200" />
+		<s:HGroup verticalAlign="middle" horizontalCenter="0" verticalCenter="0">
 			<s:Button id="less" label="less" click="decrement(event)" enabled="{minutesSet > MINUTES_MIN}" />
-			<s:TextArea id="minutes" styleName="clock" width="350"
-						text="{minutesSet}" textAlign="center" paddingLeft="100" paddingRight="100" 
+			<s:TextArea id="minutes" styleName="clock" width="150" scaleX="2" scaleY="2"
+						text="{minutesSet}" textAlign="center"
 						editable="false" selectable="false" />
 			<s:Button id="more" label="more" click="increment(event)" enabled="{MINUTES_MAX > minutesSet}" />
 		</s:HGroup>
-		<s:Button id="start" label="start!" click="startTimer(event)" />
-	</s:VGroup>
+		<s:Button id="start" label="start!" click="startTimer(event)" horizontalCenter="0" verticalCenter="200" />
+	</s:Group>
 	
 	<s:VGroup horizontalAlign="center" includeIn="run">
 		<mx:PieChart id="pie" dataProvider="{pieData}" rotation="-90" >
