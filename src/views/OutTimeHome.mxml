@@ -50,6 +50,13 @@
 			paddingLeft:0;
 			paddingRight:0;
 		}
+		.buttonStyle {
+			embedFonts: true;
+			fontFamily: printClearly;
+			fontWeight: normal;
+			fontSize: 60;
+			cornerRadius: 0;
+		}
 	</fx:Style>
 	
 	<fx:Script>
@@ -226,7 +233,7 @@
 						editable="false" selectable="false" />
 			<s:Button id="more" label="more" click="increment(event)" enabled="{MINUTES_MAX > minutesSet}" />
 		</s:HGroup>
-		<s:Button id="start" label="start!" click="startTimer(event)" horizontalCenter="0" verticalCenter="200" />
+		<s:Button id="start" label="start!" click="startTimer(event)" horizontalCenter="0" verticalCenter="200" styleName="buttonStyle" />
 	</s:Group>
 	
 	<s:VGroup horizontalAlign="center" includeIn="run">
@@ -236,15 +243,15 @@
 			</mx:series>
 		</mx:PieChart>
 		<s:HGroup verticalAlign="middle" gap="0">
-			<s:TextArea id="clock" styleName="clock" textAlign="center" editable="false" selectable="false"/>
+			<s:TextArea id="clock" styleName="clock" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2"/>
 		</s:HGroup>
 	</s:VGroup>
 
-	<s:VGroup horizontalAlign="center" includeIn="end">
-		<s:TextArea text="time to say" styleName="paragraph" textAlign="center" editable="false" selectable="false"/>
-		<s:TextArea text="sorry" styleName="display" textAlign="center" editable="false" selectable="false" />
-		<s:Button label="ok" click="{this.currentState='set';}" />
-	</s:VGroup>
+	<s:Group includeIn="end">
+		<s:TextArea text="time to say" styleName="paragraph" textAlign="center" editable="false" selectable="false" horizontalCenter="0" verticalCenter="-200"/>
+		<s:TextArea text="sorry" styleName="display" textAlign="center" editable="false" selectable="false" scaleX="2.5" scaleY="2.5" horizontalCenter="0" verticalCenter="-100" />
+		<s:Button label="all done" click="{this.currentState='set';}" styleName="buttonStyle" horizontalCenter="0" verticalCenter="200" />
+	</s:Group>
 
 	
 </s:View>
