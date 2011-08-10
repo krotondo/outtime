@@ -195,16 +195,19 @@
 			protected function updateClock():void {					
 				var m:String = Math.floor(secondsRemaining / 60).toString();
 
-				var s:String = (secondsRemaining % 60).toString();
-				s = s.length < 2 ? "0" + s: s;		
+				var s:int = (secondsRemaining % 60);
 				
-				clock.text = m + ":" + s;
+				clockMinutes.text = m
+				clockSecondsTensPlace.text = String(Math.floor(s/10));
+				clockSecondsOnesPlace.text = String(s%10);
+				
 				
 				pieData[0] = minutesSet*60 - secondsRemaining;
 				pieData[1] = secondsRemaining;
 			}
 			
 			protected function showEnd(e:TimerEvent):void {
+				Timer(e.target).reset();
 				this.currentState = "end";
 				var sound:Sound = new Sound(new URLRequest("assets/ding.mp3"));
 				sound.play();
@@ -242,9 +245,12 @@
 				<mx:PieSeries fills="{[elapsedColor, remainingColor]}" filters="[]" />	
 			</mx:series>
 		</mx:PieChart>
-		<s:HGroup verticalAlign="middle" gap="0">
-			<s:TextArea id="clock" styleName="clock" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2"/>
-		</s:HGroup>
+		<s:Group>
+			<s:TextArea id="clockMinutes" styleName="clock" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="0" horizontalCenter="-100" />
+			<s:TextArea id="clockColon" styleName="clock" text=":" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="20" contentBackgroundAlpha="0" horizontalCenter="-40" />
+			<s:TextArea id="clockSecondsTensPlace" styleName="clock" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="0" horizontalCenter="30" />
+			<s:TextArea id="clockSecondsOnesPlace" styleName="clock" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="0" horizontalCenter="120" />
+		</s:Group>
 	</s:VGroup>
 
 	<s:Group includeIn="end">
