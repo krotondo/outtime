@@ -47,7 +47,7 @@
 			contentBackgroundColor:white;
 			paddingBottom:0;
 			paddingTop:0;
-			paddingLeft:0;
+			paddingLeft:5;
 			paddingRight:0;
 		}
 		.buttonStyle {
@@ -57,13 +57,24 @@
 			fontSize: 60;
 			cornerRadius: 0;
 		}
+		.timerButtonStyle {
+			embedFonts: true;
+			fontFamily: printClearly;
+			fontWeight: normal;
+			fontSize: 100;
+			cornerRadius: 0;
+			color: #009ADF;	
+			chromeColor:white;
+		}
+
 	</fx:Style>
 	
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
 			
-			import spark.components.supportClasses.StyleableTextField;
+			import skins.TimerButtonSkin;
+			
 			import spark.events.ViewNavigatorEvent;
 
 			/**
@@ -228,13 +239,14 @@
 	<s:Group includeIn="set">
 		<s:TextArea text="How many" textAlign="center" styleName="paragraph" width="600" editable="false" selectable="false" horizontalCenter="0" verticalCenter="-300" />
 		<s:TextArea id="question" text="minutes" textAlign="center" styleName="display" width="600" editable="false" selectable="false" scaleX="2" scaleY="2" horizontalCenter="0" verticalCenter="-200" />
-		<s:TextArea text="?" textAlign="center" styleName="display" editable="false" selectable="false" scaleX="2" scaleY="2" horizontalCenter="{StyleableTextField(question.textDisplay).width/2 + 60}" verticalCenter="-200" />
+		<s:TextArea text="?" textAlign="center" styleName="display" editable="false" selectable="false" scaleX="2" scaleY="2" horizontalCenter="260" verticalCenter="-200" />
 		<s:HGroup verticalAlign="middle" horizontalCenter="0" verticalCenter="0">
-			<s:Button id="less" label="less" click="decrement(event)" enabled="{minutesSet > MINUTES_MIN}" />
-			<s:TextArea id="minutes" styleName="clock" width="150" scaleX="2" scaleY="2"
+			<s:Button id="less" label="-" click="decrement(event)" enabled="{minutesSet > MINUTES_MIN}" styleName="timerButtonStyle" 
+					  scaleX="2" scaleY="2" skinClass="skins.TimerButtonSkin"/>
+			<s:TextArea id="minutes" styleName="clock" width="60" scaleX="2" scaleY="2"
 						text="{minutesSet}" textAlign="center"
-						editable="false" selectable="false" />
-			<s:Button id="more" label="more" click="increment(event)" enabled="{MINUTES_MAX > minutesSet}" />
+						editable="false" selectable="false"/>
+			<s:Button id="more" label="+" click="increment(event)" enabled="{MINUTES_MAX > minutesSet}" styleName="timerButtonStyle" scaleX="2" scaleY="2" skinClass="skins.TimerButtonSkin" />
 		</s:HGroup>
 		<s:Button id="start" label="start!" click="startTimer(event)" horizontalCenter="0" verticalCenter="200" styleName="buttonStyle" />
 	</s:Group>
