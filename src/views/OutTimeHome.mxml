@@ -266,9 +266,9 @@
 	</s:VGroup>
 
 	<s:Group includeIn="end">
-		<s:TextArea text="time to say" styleName="paragraph" textAlign="center" editable="false" selectable="false" horizontalCenter="0" verticalCenter="-200"/>
-		<s:TextArea text="sorry" styleName="display" textAlign="center" editable="false" selectable="false" scaleX="2.5" scaleY="2.5" horizontalCenter="0" verticalCenter="-100" />
-		<s:Button label="all done" click="{this.currentState='set';}" styleName="buttonStyle" horizontalCenter="0" verticalCenter="200" />
+		<s:TextArea text="all" styleName="display" textAlign="center" editable="false" selectable="false" scaleX="2.5" scaleY="2.5" horizontalCenter="0" verticalCenter="-150"/>
+		<s:TextArea text="done" styleName="display" textAlign="center" editable="false" selectable="false" scaleX="2.5" scaleY="2.5" horizontalCenter="0" verticalCenter="0" />
+		<s:Button label="o.k." click="{this.currentState='set';}" styleName="buttonStyle" horizontalCenter="0" verticalCenter="200" />
 	</s:Group>
 
 	
