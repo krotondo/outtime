@@ -248,7 +248,7 @@
 						editable="false" selectable="false"/>
 			<s:Button id="more" label="+" click="increment(event)" enabled="{MINUTES_MAX > minutesSet}" styleName="timerButtonStyle" scaleX="2" scaleY="2" skinClass="skins.TimerButtonSkin" />
 		</s:HGroup>
-		<s:Button id="start" label="start!" click="startTimer(event)" horizontalCenter="0" verticalCenter="200" styleName="buttonStyle" />
+		<s:Button id="start" label="start!" click="startTimer(event)" horizontalCenter="0" verticalCenter="200" styleName="buttonStyle" skinClass="skins.GeneralButtonSkin" />
 	</s:Group>
 	
 	<s:VGroup horizontalAlign="center" includeIn="run">
@@ -268,8 +268,7 @@
 	<s:Group includeIn="end">
 		<s:TextArea text="all" styleName="display" textAlign="center" editable="false" selectable="false" scaleX="2.5" scaleY="2.5" horizontalCenter="0" verticalCenter="-150"/>
 		<s:TextArea text="done" styleName="display" textAlign="center" editable="false" selectable="false" scaleX="2.5" scaleY="2.5" horizontalCenter="0" verticalCenter="0" />
-		<s:Button label="o.k." click="{this.currentState='set';}" styleName="buttonStyle" horizontalCenter="0" verticalCenter="200" />
+		<s:Button label="o.k." click="{this.currentState='set';}" styleName="buttonStyle" skinClass="skins.GeneralButtonSkin" horizontalCenter="0" verticalCenter="200" />
 	</s:Group>
 
-	
 </s:View>

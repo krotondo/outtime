@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Graphic version="2.0" xmlns="http://ns.adobe.com/fxg/2008" scaleGridLeft="22" scaleGridRight="128" scaleGridTop="22" scaleGridBottom="78">
+    <Rect width="150" height="100" radiusX="22" radiusY="22">
+      <fill>
+        <SolidColor color="#BFE6F7"/>
+      </fill>
+    </Rect>
+	<!-- scale grid fix -->
+</Graphic>
