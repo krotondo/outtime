@@ -12,8 +12,8 @@ package skins
 		public function TimerButtonSkin()
 		{
 			super();
-			upBorderSkin = assets.fxg.WhiteSquare;
-			downBorderSkin = assets.fxg.WhiteSquare;
+			upBorderSkin = WhiteSquare;
+			downBorderSkin = WhiteSquare;
 		}
 		
 		override protected function drawBackground(unscaledWidth:Number, unscaledHeight:Number):void
