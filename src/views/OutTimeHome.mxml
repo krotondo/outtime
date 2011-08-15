@@ -93,6 +93,8 @@
 			protected const ELAPSED:String = "elapsed";
 			protected const REMAINING:String = "remaining";
 			
+			protected const DEBUG:Boolean = true;
+			
 			[Bindable] protected var minutesSet:int;
 			[Bindable] protected var secondsRemaining:int;
 			[Bindable] protected var pieData:ArrayCollection;
@@ -101,7 +103,7 @@
 			protected var isTimerRunning:Boolean = false;
 			
 			protected function onViewActivate(event:ViewNavigatorEvent):void
-			{
+			{	
 				if (! isTimerRunning) {
 					minutesSet = MINUTES_DEFAULT;
 					
@@ -123,6 +125,27 @@
 				if (this.stage && this.stage.autoOrients)
 				{
 					this.stage.addEventListener(StageOrientationEvent.ORIENTATION_CHANGE, onOrientationChange);
+				}
+				
+				if (DEBUG) {
+					this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+				}
+			}
+			
+			protected function onKeyDown(e:KeyboardEvent):void {
+				var keyCode:uint = e.keyCode;
+				switch (keyCode) {
+					case Keyboard.S:
+						this.currentState = "set";
+						break;
+					case Keyboard.R:
+						this.currentState = "run";
+						break;
+					case Keyboard.E:
+						this.currentState = "end";
+						break;
+					default:
+						break;
 				}
 			}
 			
