@@ -3,6 +3,8 @@
 	xmlns:s="library://ns.adobe.com/flex/spark" 
 	title="out time" 
 	viewActivate="onViewActivate(event)" 
+	addedToStage="onAddedToStage(event)"
+	removedFromStage="onRemovedFromStage(event)"
 	xmlns:mx="library://ns.adobe.com/flex/mx"
 	actionBarVisible="false"
 	>
@@ -112,6 +114,39 @@
 				} else { // timer is running
 					// @TODO react appropriately if timer should have ended while backgrounded
 					// or continue counting down if still time on clock (use system clock to know)
+				}
+
+			}
+			
+			protected function onAddedToStage(event:Event):void {
+				// Handle orientation change events if auto-orient is true
+				if (this.stage && this.stage.autoOrients)
+				{
+					this.stage.addEventListener(StageOrientationEvent.ORIENTATION_CHANGE, onOrientationChange);
+				}
+			}
+			
+			protected function onRemovedFromStage(event:Event):void {
+				this.stage.removeEventListener(StageOrientationEvent.ORIENTATION_CHANGE, onOrientationChange);
+			}
+			
+			// Handle device orientation changes
+			protected function onOrientationChange(event:StageOrientationEvent):void
+			{
+				trace("Orientation changed from " + event.beforeOrientation + " to " + event.afterOrientation);
+				switch (event.afterOrientation)
+				{
+					case StageOrientation.DEFAULT:
+					case StageOrientation.UPSIDE_DOWN:
+						trace("portrait");
+						break;
+					case StageOrientation.ROTATED_RIGHT:
+					case StageOrientation.ROTATED_LEFT:
+						trace("landscape");
+						break;
+					case StageOrientation.UNKNOWN:
+						trace("unknown");
+						break;
 				}
 			}
 						
@@ -244,20 +279,24 @@
 		<s:State name="end" />
 	</s:states>
 	
-	<s:Group includeIn="set">
-		<s:TextArea text="How many" textAlign="center" styleName="paragraph" width="600" editable="false" selectable="false" horizontalCenter="0" verticalCenter="-300" />
-		<s:TextArea id="question" text="minutes" textAlign="center" styleName="display" width="600" editable="false" selectable="false" scaleX="2" scaleY="2" horizontalCenter="0" verticalCenter="-200" />
-		<s:TextArea text="?" textAlign="center" styleName="display" editable="false" selectable="false" scaleX="2" scaleY="2" horizontalCenter="260" verticalCenter="-200" />
-		<s:HGroup verticalAlign="middle" horizontalCenter="0" verticalCenter="0">
-			<s:Button id="less" label="-" click="decrement(event)" enabled="{minutesSet > MINUTES_MIN}" visible="{less.enabled}" styleName="timerButtonStyle" 
-					  scaleX="2" scaleY="2" skinClass="skins.TimerButtonSkin"/>
-			<s:TextArea id="minutes" styleName="clock" width="60" scaleX="2" scaleY="2"
-						text="{minutesSet}" textAlign="center"
-						editable="false" selectable="false"/>
-			<s:Button id="more" label="+" click="increment(event)" enabled="{MINUTES_MAX > minutesSet}" visible="{more.enabled}" styleName="timerButtonStyle" scaleX="2" scaleY="2" skinClass="skins.TimerButtonSkin" />
-		</s:HGroup>
-		<s:Button id="start" label="start!" click="startTimer(event)" horizontalCenter="0" verticalCenter="200" styleName="buttonStyle" skinClass="skins.GeneralButtonSkin" />
-	</s:Group>
+	<s:VGroup horizontalAlign="center" gap="0" paddingTop="0" paddingBottom="0" includeIn="set">
+		<s:Group>			
+			<s:TextArea text="How many" textAlign="center" styleName="paragraph" width="600" editable="false" selectable="false" horizontalCenter="0" />
+			<s:TextArea id="question" text="minutes" textAlign="center" styleName="display" width="600" editable="false" selectable="false" scaleX="2" scaleY="2" horizontalCenter="0" paddingTop="0" paddingBottom="0" y="40" />
+			<s:TextArea text="?" textAlign="center" styleName="display" editable="false" selectable="false" scaleX="2" scaleY="2" horizontalCenter="260" paddingTop="0" paddingBottom="0" y="40" />
+			<s:HGroup verticalAlign="middle" horizontalCenter="0" paddingTop="0" paddingBottom="0" y="225">
+				<s:Button id="less" label="-" click="decrement(event)" enabled="{minutesSet > MINUTES_MIN}" visible="{less.enabled}" styleName="timerButtonStyle" 
+						  scaleX="2" scaleY="2" skinClass="skins.TimerButtonSkin"/>
+				<s:TextArea id="minutes" styleName="clock" width="60" scaleX="2" scaleY="2"
+							text="{minutesSet}" textAlign="center"
+							editable="false" selectable="false" />
+				<s:Button id="more" label="+" click="increment(event)" enabled="{MINUTES_MAX > minutesSet}" visible="{more.enabled}" styleName="timerButtonStyle" scaleX="2" scaleY="2" skinClass="skins.TimerButtonSkin" />
+			</s:HGroup>
+
+		</s:Group>
+
+		<s:Button id="start" label="start!" click="startTimer(event)" styleName="buttonStyle" skinClass="skins.GeneralButtonSkin" />
+	</s:VGroup>
 	
 	<s:VGroup horizontalAlign="center" includeIn="run">
 		<mx:PieChart id="pie" dataProvider="{pieData}" rotation="-90" >
