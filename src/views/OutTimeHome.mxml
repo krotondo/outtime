@@ -292,23 +292,21 @@
 							editable="false" selectable="false" />
 				<s:Button id="more" label="+" click="increment(event)" enabled="{MINUTES_MAX > minutesSet}" visible="{more.enabled}" styleName="timerButtonStyle" scaleX="2" scaleY="2" skinClass="skins.TimerButtonSkin" />
 			</s:HGroup>
-
 		</s:Group>
-
 		<s:Button id="start" label="start!" click="startTimer(event)" styleName="buttonStyle" skinClass="skins.GeneralButtonSkin" />
 	</s:VGroup>
 	
-	<s:VGroup horizontalAlign="center" includeIn="run">
-		<mx:PieChart id="pie" dataProvider="{pieData}" rotation="-90" >
+	<s:VGroup horizontalAlign="center" includeIn="run" gap="0">
+		<mx:PieChart id="pie" dataProvider="{pieData}" rotation="-90" paddingTop="50">
 			<mx:series>
 				<mx:PieSeries fills="{[elapsedColor, remainingColor]}" filters="[]" />	
 			</mx:series>
 		</mx:PieChart>
 		<s:Group>
-			<s:TextArea id="clockMinutes" styleName="clock" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="0" horizontalCenter="-100" />
-			<s:TextArea id="clockColon" styleName="clock" text=":" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="20" contentBackgroundAlpha="0" horizontalCenter="-40" />
-			<s:TextArea id="clockSecondsTensPlace" styleName="clock" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="0" horizontalCenter="30" />
-			<s:TextArea id="clockSecondsOnesPlace" styleName="clock" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="0" horizontalCenter="120" />
+			<s:TextArea id="clockMinutes" styleName="clock" textAlign="right" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="1" horizontalCenter="-85" />
+			<s:TextArea id="clockColon" styleName="clock" text=":" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="20" contentBackgroundAlpha="0" horizontalCenter="-30" />
+			<s:TextArea id="clockSecondsTensPlace" styleName="clock" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="0" horizontalCenter="35" />
+			<s:TextArea id="clockSecondsOnesPlace" styleName="clock" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="0" horizontalCenter="125" />
 		</s:Group>
 	</s:VGroup>
 
