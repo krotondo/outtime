@@ -64,7 +64,7 @@
 			fontWeight: normal;
 			fontSize: 100;
 			cornerRadius: 0;
-			color: #009ADF;	
+			color: #BFE6F7;	
 			chromeColor:white;
 		}
 
@@ -242,12 +242,12 @@
 		<s:TextArea id="question" text="minutes" textAlign="center" styleName="display" width="600" editable="false" selectable="false" scaleX="2" scaleY="2" horizontalCenter="0" verticalCenter="-200" />
 		<s:TextArea text="?" textAlign="center" styleName="display" editable="false" selectable="false" scaleX="2" scaleY="2" horizontalCenter="260" verticalCenter="-200" />
 		<s:HGroup verticalAlign="middle" horizontalCenter="0" verticalCenter="0">
-			<s:Button id="less" label="-" click="decrement(event)" enabled="{minutesSet > MINUTES_MIN}" styleName="timerButtonStyle" 
+			<s:Button id="less" label="-" click="decrement(event)" enabled="{minutesSet > MINUTES_MIN}" visible="{less.enabled}" styleName="timerButtonStyle" 
 					  scaleX="2" scaleY="2" skinClass="skins.TimerButtonSkin"/>
 			<s:TextArea id="minutes" styleName="clock" width="60" scaleX="2" scaleY="2"
 						text="{minutesSet}" textAlign="center"
 						editable="false" selectable="false"/>
-			<s:Button id="more" label="+" click="increment(event)" enabled="{MINUTES_MAX > minutesSet}" styleName="timerButtonStyle" scaleX="2" scaleY="2" skinClass="skins.TimerButtonSkin" />
+			<s:Button id="more" label="+" click="increment(event)" enabled="{MINUTES_MAX > minutesSet}" visible="{more.enabled}" styleName="timerButtonStyle" scaleX="2" scaleY="2" skinClass="skins.TimerButtonSkin" />
 		</s:HGroup>
 		<s:Button id="start" label="start!" click="startTimer(event)" horizontalCenter="0" verticalCenter="200" styleName="buttonStyle" skinClass="skins.GeneralButtonSkin" />
 	</s:Group>
