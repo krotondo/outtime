@@ -46,6 +46,6 @@
 	</fx:Script>
 
 	<s:navigationContent>
-		<s:Button icon="@Embed('assets/launchpad_home.png')" click="navigator.popToFirstView()"/>
+		<!--s:Button icon="@Embed('assets/launchpad_home.png')" click="navigator.popToFirstView()"/-->
 	</s:navigationContent>
 </s:ViewNavigatorApplication>
