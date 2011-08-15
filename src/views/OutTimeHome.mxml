@@ -302,7 +302,7 @@
 		<s:State name="end" />
 	</s:states>
 	
-	<s:VGroup horizontalAlign="center" gap="0" paddingTop="0" paddingBottom="0" includeIn="set">
+	<s:VGroup id="set" includeIn="set" horizontalAlign="center" gap="0" paddingTop="0" paddingBottom="0" >
 		<s:Group>			
 			<s:TextArea text="How many" textAlign="center" styleName="paragraph" width="600" editable="false" selectable="false" horizontalCenter="0" />
 			<s:TextArea id="question" text="minutes" textAlign="center" styleName="display" width="600" editable="false" selectable="false" scaleX="2" scaleY="2" horizontalCenter="0" paddingTop="0" paddingBottom="0" y="40" />
@@ -319,7 +319,7 @@
 		<s:Button id="start" label="start!" click="startTimer(event)" styleName="buttonStyle" skinClass="skins.GeneralButtonSkin" />
 	</s:VGroup>
 	
-	<s:VGroup horizontalAlign="center" includeIn="run" gap="0">
+	<s:VGroup id="run" includeIn="run" horizontalAlign="center"  gap="0">
 		<mx:PieChart id="pie" dataProvider="{pieData}" rotation="-90" paddingTop="50">
 			<mx:series>
 				<mx:PieSeries fills="{[elapsedColor, remainingColor]}" filters="[]" />	
@@ -333,10 +333,12 @@
 		</s:Group>
 	</s:VGroup>
 
-	<s:Group includeIn="end">
-		<s:TextArea text="all" styleName="display" textAlign="center" editable="false" selectable="false" scaleX="2.5" scaleY="2.5" horizontalCenter="0" verticalCenter="-150"/>
-		<s:TextArea text="done" styleName="display" textAlign="center" editable="false" selectable="false" scaleX="2.5" scaleY="2.5" horizontalCenter="0" verticalCenter="0" />
-		<s:Button label="o.k." click="{this.currentState='set';}" styleName="buttonStyle" skinClass="skins.GeneralButtonSkin" horizontalCenter="0" verticalCenter="200" />
-	</s:Group>
+	<s:VGroup id="end" includeIn="end" horizontalAlign="center" gap="0" verticalCenter="0" paddingBottom="200">
+		<s:Group>
+			<s:TextArea text="all" styleName="display" textAlign="center" editable="false" selectable="false" scaleX="2.5" scaleY="2.5" horizontalCenter="0" verticalCenter="0" paddingBottom="0" />
+			<s:TextArea text="done" styleName="display" textAlign="center" editable="false" selectable="false" scaleX="2.5" scaleY="2.5" horizontalCenter="0" verticalCenter="150" paddingBottom="0" />
+		</s:Group>
+		<s:Button label="o.k." click="{this.currentState='set';}" styleName="buttonStyle" skinClass="skins.GeneralButtonSkin" />
+	</s:VGroup>
 
 </s:View>
