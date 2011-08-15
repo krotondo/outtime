@@ -141,10 +141,7 @@
 				}
 			}
 			
-									
 			protected function onOpenDatabase(event:SQLEvent):void {
-				trace("database opened successfully");
-				
 				// creates "settings" table
 				var statement:SQLStatement = new SQLStatement();
 				statement.sqlConnection = sqlConnection;
@@ -160,32 +157,24 @@
 			}
 			
 			protected function onCreateTable(e:SQLEvent):void {
-				trace("table created successfully");
-
 				// creates a "minutes" row, if it doesn't already exist
 				var statement:SQLStatement = new SQLStatement();
 				statement.sqlConnection = sqlConnection;
 				
-				trace("trying to store minutes");
 				statement.text = "INSERT INTO settings (name, value) VALUES (:name, :value)";
 				statement.parameters[":name"] = "minutes";
 				statement.parameters[":value"] = minutesSet;
 					
 				try {
 					statement.execute();
-					trace("minutes successfully stored");
 				} catch (error:SQLError) {
 					// if the row does already exist	
 					if (error.errorID == 3131 && error.detailArguments[0] == "name") {
-						trace("a 'minutes' row already exists");
 						
-						// gets the existing value from the database
-						// and uses it to set 'mins'
+						// gets the existing value from the database and uses it to set 'mins'
 						statement.clearParameters();
-						statement.text = "SELECT value FROM settings WHERE name = 'minutes'";
 						try {
 							statement.execute();
-							trace("minutes successfully retrieved");
 							var result:SQLResult = statement.getResult();
 							minutesSet = Number(Object(result.data[0]).value);
 						} catch (error:SQLError) {
@@ -221,7 +210,6 @@
 			}
 			
 			protected function startTimer(e:MouseEvent):void {
-				trace("start button pressed");
 				this.currentState = "run";
 				secondsRemaining = minutesSet * 60;
 				
