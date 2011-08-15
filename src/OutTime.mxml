@@ -3,49 +3,13 @@
 	xmlns:s="library://ns.adobe.com/flex/spark"
 	xmlns:mx="library://ns.adobe.com/flex/mx"
 	firstView="views.OutTimeHome"
-	splashScreenImage="@Embed('assets/splash.png')" splashScreenScaleMode="letterbox"
-	applicationComplete="onApplicationComplete()">
+	splashScreenImage="@Embed('assets/splash.png')" 
+	splashScreenScaleMode="letterbox"
+	>
 
-	<fx:Script>
-		<![CDATA[
-
-			protected function onApplicationComplete():void
-			{
-				// Handle orientation change events if auto-orient is true
-				if (stage.autoOrients)
-				{
-					this.stage.addEventListener(StageOrientationEvent.ORIENTATION_CHANGE, onOrientationChange);
-				}
-
-			}
-
-			// Handle device orientation changes
-			protected function onOrientationChange(event:StageOrientationEvent):void
-			{
-				trace("Orientation changed from " + event.beforeOrientation + " to " + event.afterOrientation);
-				switch (event.afterOrientation)
-				{
-					case StageOrientation.DEFAULT:
-						trace("Default orientation");
-						break;
-					case StageOrientation.ROTATED_RIGHT:
-						trace("Rotated right");
-						break;
-					case StageOrientation.ROTATED_LEFT:
-						trace("Rotated left");
-						break;
-					case StageOrientation.UPSIDE_DOWN:
-						trace("Upside down");
-						break;
-					case StageOrientation.UNKNOWN:
-						trace("Unknown");
-						break;
-				}
-			}
-		]]>
-	</fx:Script>
-
+	<!--
 	<s:navigationContent>
-		<!--s:Button icon="@Embed('assets/launchpad_home.png')" click="navigator.popToFirstView()"/-->
+		<s:Button icon="@Embed('assets/launchpad_home.png')" click="navigator.popToFirstView()"/>
 	</s:navigationContent>
+	-->
 </s:ViewNavigatorApplication>
