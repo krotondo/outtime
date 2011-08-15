@@ -96,17 +96,23 @@
 			[Bindable] protected var pieData:ArrayCollection;
 			
 			protected var sqlConnection:SQLConnection;
+			protected var isTimerRunning:Boolean = false;
 			
 			protected function onViewActivate(event:ViewNavigatorEvent):void
 			{
-				minutesSet = MINUTES_DEFAULT;
-				
-				sqlConnection = new SQLConnection();
-				sqlConnection.addEventListener(SQLEvent.OPEN, onOpenDatabase);
-				sqlConnection.addEventListener(SQLErrorEvent.ERROR, onSQLError);				
-				sqlConnection.open(File.applicationStorageDirectory.resolvePath(DATABASE_FILE));
-				
-				pieData = new ArrayCollection([0, minutesSet]);
+				if (! isTimerRunning) {
+					minutesSet = MINUTES_DEFAULT;
+					
+					sqlConnection = new SQLConnection();
+					sqlConnection.addEventListener(SQLEvent.OPEN, onOpenDatabase);
+					sqlConnection.addEventListener(SQLErrorEvent.ERROR, onSQLError);				
+					sqlConnection.open(File.applicationStorageDirectory.resolvePath(DATABASE_FILE));
+					
+					pieData = new ArrayCollection([minutesSet, 0]);
+				} else { // timer is running
+					// @TODO react appropriately if timer should have ended while backgrounded
+					// or continue counting down if still time on clock (use system clock to know)
+				}
 			}
 						
 			protected function onOpenDatabase(event:SQLEvent):void {
@@ -196,6 +202,7 @@
 				timer.addEventListener(TimerEvent.TIMER, countDown);
 				timer.addEventListener(TimerEvent.TIMER_COMPLETE, showEnd);
 				timer.start();
+				isTimerRunning = true;
 				updateClock();
 			}
 			
@@ -220,6 +227,7 @@
 			
 			protected function showEnd(e:TimerEvent):void {
 				Timer(e.target).reset();
+				isTimerRunning = false;
 				this.currentState = "end";
 				var sound:Sound = new Sound(new URLRequest("assets/ding.mp3"));
 				sound.play();
