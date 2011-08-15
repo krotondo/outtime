@@ -230,6 +230,8 @@
 				timer.addEventListener(TimerEvent.TIMER_COMPLETE, showEnd);
 				timer.start();
 				isTimerRunning = true;
+				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
+				
 				updateClock();
 			}
 			
@@ -257,6 +259,11 @@
 				this.currentState = "end";
 				var sound:Sound = new Sound(new URLRequest("assets/ding.mp3"));
 				sound.play();
+			}
+			
+			protected function onOKClick(e:Event):void {
+				this.currentState='set'; 
+				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.NORMAL;
 			}
 		]]>
 	</fx:Script>
@@ -307,7 +314,6 @@
 			<s:TextArea text="all" styleName="display" textAlign="center" editable="false" selectable="false" scaleX="2.5" scaleY="2.5" horizontalCenter="0" verticalCenter="0" paddingBottom="0" />
 			<s:TextArea text="done" styleName="display" textAlign="center" editable="false" selectable="false" scaleX="2.5" scaleY="2.5" horizontalCenter="0" verticalCenter="150" paddingBottom="0" />
 		</s:Group>
-		<s:Button label="o.k." click="{this.currentState='set';}" styleName="buttonStyle" skinClass="skins.GeneralButtonSkin" />
+		<s:Button label="o.k." click="onOKClick(event)" styleName="buttonStyle" skinClass="skins.GeneralButtonSkin" />
 	</s:VGroup>
-
 </s:View>
