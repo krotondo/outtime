@@ -4,7 +4,6 @@
 	title="out time" 
 	viewActivate="onViewActivate(event)" 
 	addedToStage="onAddedToStage(event)"
-	removedFromStage="onRemovedFromStage(event)"
 	xmlns:mx="library://ns.adobe.com/flex/mx"
 	actionBarVisible="false"
 	>
@@ -117,16 +116,9 @@
 					// @TODO react appropriately if timer should have ended while backgrounded
 					// or continue counting down if still time on clock (use system clock to know)
 				}
-
 			}
 			
 			protected function onAddedToStage(event:Event):void {
-				// Handle orientation change events if auto-orient is true
-				if (this.stage && this.stage.autoOrients)
-				{
-					this.stage.addEventListener(StageOrientationEvent.ORIENTATION_CHANGE, onOrientationChange);
-				}
-				
 				if (DEBUG) {
 					this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 				}
@@ -149,30 +141,7 @@
 				}
 			}
 			
-			protected function onRemovedFromStage(event:Event):void {
-				this.stage.removeEventListener(StageOrientationEvent.ORIENTATION_CHANGE, onOrientationChange);
-			}
-			
-			// Handle device orientation changes
-			protected function onOrientationChange(event:StageOrientationEvent):void
-			{
-				trace("Orientation changed from " + event.beforeOrientation + " to " + event.afterOrientation);
-				switch (event.afterOrientation)
-				{
-					case StageOrientation.DEFAULT:
-					case StageOrientation.UPSIDE_DOWN:
-						trace("portrait");
-						break;
-					case StageOrientation.ROTATED_RIGHT:
-					case StageOrientation.ROTATED_LEFT:
-						trace("landscape");
-						break;
-					case StageOrientation.UNKNOWN:
-						trace("unknown");
-						break;
-				}
-			}
-						
+									
 			protected function onOpenDatabase(event:SQLEvent):void {
 				trace("database opened successfully");
 				
