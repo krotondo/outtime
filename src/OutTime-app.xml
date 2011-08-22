@@ -170,9 +170,14 @@
 			</array>
 			<key>UIStatusBarStyle</key>
 			<string>UIStatusBarStyleBlackOpaque</string>
+<<<<<<< HEAD
 			<!-- UIBackgroundModes support coming in AIR 3 -->
 			<key>UIBackgroundModes</key>
 			<string>audio</string>			
+=======
+			<key>UIPrerenderedIcon</key> 
+        	<true/>
+>>>>>>> work
 		]]></InfoAdditions>
 		<requestedDisplayResolution>high</requestedDisplayResolution>
 	</iPhone>
