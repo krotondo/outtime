@@ -170,6 +170,8 @@
 			</array>
 			<key>UIStatusBarStyle</key>
 			<string>UIStatusBarStyleBlackOpaque</string>
+			<key>UIPrerenderedIcon</key> 
+        	<true/>
 		]]></InfoAdditions>
 		<requestedDisplayResolution>high</requestedDisplayResolution>
 	</iPhone>
