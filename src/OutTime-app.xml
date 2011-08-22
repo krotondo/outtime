@@ -109,13 +109,13 @@
 	<!-- The icon the system uses for the application. For at least one resolution,
 		 specify the path to a PNG file included in the AIR package. Optional. -->
 	<icon>
-		<image16x16>assets/launchpad_default_icon16.png</image16x16>
+		<image16x16>assets/16x16.png</image16x16>
 		<image29x29>assets/icon29x29.png</image29x29>
-		<image32x32>assets/launchpad_default_icon32.png</image32x32>
-		<image36x36>assets/launchpad_default_icon36.png</image36x36>
-		<image48x48>assets/launchpad_default_icon48.png</image48x48>
+		<image32x32>assets/icon32x32.png</image32x32>
+		<image36x36>assets/icon36x36.png</image36x36>
+		<image48x48>assets/icon48x48.png</image48x48>
 		<image57x57>assets/icon57x57.png</image57x57>
-		<image72x72>assets/launchpad_default_icon72.png</image72x72>
+		<image72x72>assets/icon72x72.png</image72x72>
 		<image114x114>assets/icon114x114.png</image114x114>
 		<image128x128>assets/icon128x128.png</image128x128>
 	</icon>
@@ -170,14 +170,8 @@
 			</array>
 			<key>UIStatusBarStyle</key>
 			<string>UIStatusBarStyleBlackOpaque</string>
-<<<<<<< HEAD
-			<!-- UIBackgroundModes support coming in AIR 3 -->
-			<key>UIBackgroundModes</key>
-			<string>audio</string>			
-=======
 			<key>UIPrerenderedIcon</key> 
         	<true/>
->>>>>>> work
 		]]></InfoAdditions>
 		<requestedDisplayResolution>high</requestedDisplayResolution>
 	</iPhone>
