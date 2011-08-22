@@ -97,9 +97,11 @@
 			[Bindable] protected var minutesSet:int;
 			[Bindable] protected var secondsRemaining:int;
 			[Bindable] protected var pieData:ArrayCollection;
+			[Bindable] protected var suspended:Boolean = false;
 			
 			protected var sqlConnection:SQLConnection;
 			protected var isTimerRunning:Boolean = false;
+			protected var timer:Timer;
 			
 			protected function onViewActivate(event:ViewNavigatorEvent):void
 			{	
@@ -113,6 +115,9 @@
 					
 					pieData = new ArrayCollection([0, minutesSet]);
 				} else { // timer is running
+					suspended = true;
+					timer.reset();
+					isTimerRunning = false;
 					// @TODO react appropriately if timer should have ended while backgrounded
 					// or continue counting down if still time on clock (use system clock to know)
 				}
@@ -213,7 +218,7 @@
 				this.currentState = "run";
 				secondsRemaining = minutesSet * 60;
 				
-				var timer:Timer = new Timer(1000, secondsRemaining);
+				timer = new Timer(1000, secondsRemaining);
 				timer.addEventListener(TimerEvent.TIMER, countDown);
 				timer.addEventListener(TimerEvent.TIMER_COMPLETE, showEnd);
 				timer.start();
@@ -251,6 +256,7 @@
 			
 			protected function onOKClick(e:Event):void {
 				this.currentState='set'; 
+				this.suspended = false;
 				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.NORMAL;
 			}
 		]]>
@@ -282,20 +288,28 @@
 		</s:Group>
 		<s:Button id="start" label="start!" click="startTimer(event)" styleName="buttonStyle" skinClass="skins.GeneralButtonSkin" />
 	</s:VGroup>
-	
-	<s:VGroup id="run" includeIn="run" horizontalAlign="center"  gap="0">
-		<mx:PieChart id="pie" dataProvider="{pieData}" rotation="-90" paddingTop="50">
-			<mx:series>
-				<mx:PieSeries fills="{[elapsedColor, remainingColor]}" filters="[]" />	
-			</mx:series>
-		</mx:PieChart>
-		<s:Group>
-			<s:TextArea id="clockMinutes" styleName="clock" textAlign="right" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="1" horizontalCenter="-85" />
-			<s:TextArea id="clockColon" styleName="clock" text=":" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="20" contentBackgroundAlpha="0" horizontalCenter="-30" />
-			<s:TextArea id="clockSecondsTensPlace" styleName="clock" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="0" horizontalCenter="35" />
-			<s:TextArea id="clockSecondsOnesPlace" styleName="clock" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="0" horizontalCenter="125" />
-		</s:Group>
-	</s:VGroup>
+
+	<s:Group includeIn="run">		
+		<s:VGroup includeIn="run" alpha="{suspended ? .1 : 1}" horizontalAlign="center"  gap="0" horizontalCenter="0" verticalCenter="0">
+			<mx:PieChart id="pie" dataProvider="{pieData}" rotation="-90" paddingTop="50">
+				<mx:series>
+					<mx:PieSeries fills="{[elapsedColor, remainingColor]}" filters="[]" />	
+				</mx:series>
+			</mx:PieChart>
+			<s:Group>
+				<s:TextArea id="clockMinutes" styleName="clock" textAlign="right" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="1" horizontalCenter="-85" />
+				<s:TextArea id="clockColon" styleName="clock" text=":" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="20" contentBackgroundAlpha="0" horizontalCenter="-30" />
+				<s:TextArea id="clockSecondsTensPlace" styleName="clock" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="0" horizontalCenter="35" />
+				<s:TextArea id="clockSecondsOnesPlace" styleName="clock" textAlign="center" editable="false" selectable="false" scaleX="2" scaleY="2" width="60" contentBackgroundAlpha="0" horizontalCenter="125" />
+			</s:Group>
+		</s:VGroup>
+		<s:VGroup visible="{suspended}" horizontalCenter="0" verticalCenter="0" horizontalAlign="center">
+			<s:TextArea id="timerStopped" styleName="display" textAlign="center" editable="false" selectable="false" text="timer suspended" paddingBottom="0" />
+			<s:TextArea id="appSuspended" styleName="paragraph" fontSize="48" textAlign="center" editable="false" selectable="false" text="please keep the timer open during use" width="70%" paddingBottom="30" />
+			<s:Button label="o.k." click="onOKClick(event)" styleName="buttonStyle" skinClass="skins.GeneralButtonSkin" />
+		</s:VGroup>
+	</s:Group>
+
 
 	<s:VGroup id="end" includeIn="end" horizontalAlign="center" gap="0" verticalCenter="0" paddingBottom="200">
 		<s:Group>
