@@ -109,7 +109,7 @@
 	<!-- The icon the system uses for the application. For at least one resolution,
 		 specify the path to a PNG file included in the AIR package. Optional. -->
 	<icon>
-		<image16x16>assets/16x16.png</image16x16>
+		<image16x16>assets/icon16x16.png</image16x16>
 		<image29x29>assets/icon29x29.png</image29x29>
 		<image32x32>assets/icon32x32.png</image32x32>
 		<image36x36>assets/icon36x36.png</image36x36>
