@@ -3,4 +3,5 @@
 .actionScriptProperties
 .flexProperties
 .project
+bin/
 bin-debug/
