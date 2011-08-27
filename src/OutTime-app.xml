@@ -89,8 +89,8 @@
 	<autoOrients>true</autoOrients>
 	<renderMode>auto</renderMode>
 	<aspectRatio>portrait</aspectRatio>
-	<fullScreen>false</fullScreen>
-	<visible>false</visible>
+	<fullScreen>true</fullScreen>
+	<visible>true</visible>
 	</initialWindow>
 
 	<!-- We recommend omitting the supportedProfiles element, -->
